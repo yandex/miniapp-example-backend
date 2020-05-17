@@ -1,0 +1,32 @@
+version: '3.6'
+services:
+  postgres:
+    image: postgres:12
+    container_name: miniapp_api_db
+    hostname: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 6432:5432
+    environment:
+      - POSTGRES_DB=miniapp
+      - POSTGRES_USER=miniapp
+      - POSTGRES_PASSWORD=miniapp
+  app:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=miniapp
+      - DB_PASSWORD=miniapp
+      - DB_NAME=miniapp
+      - NODE_ENV=local
+
+volumes:
+  db-data:
+    name: 'miniapp_api_db_data'
