@@ -22,6 +22,12 @@ export enum Status {
     Paid = 'paid',
 }
 
+export type UserInfo = {
+    name?: string;
+    email?: string;
+    phone?: string;
+};
+
 @Entity()
 export default class Payment extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -34,6 +40,12 @@ export default class Payment extends BaseEntity {
 
     @Column()
     userId!: string;
+
+    @Column({
+        type: 'simple-json',
+        nullable: true,
+    })
+    userInfo?: UserInfo;
 
     @Column({
         type: 'enum',

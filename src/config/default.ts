@@ -25,6 +25,12 @@ const config: Config = {
             },
         },
     },
+    pushNotifications: {
+        baseUrl: 'https://floyd.chats.yandex.ru/ycm/v1/jsonrpc/',
+        key: process.env.PLATFORM_API_KEY ?? '',
+        appId: 100375,
+        templateName: '820157',
+    },
     auth: {
         key: process.env.AUTH_SECRET_KEY ?? '',
         options: {

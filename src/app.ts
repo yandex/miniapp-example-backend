@@ -11,6 +11,7 @@ import { ping } from './controllers/ping';
 import { createPaymentController } from './controllers/payment';
 import { getPaymentsController } from './controllers/payments';
 import { updatePaymentStatus } from './controllers/payment-status';
+import { updateUserInfoController } from './controllers/payment-user-info';
 import asyncMiddleware from './middleware/async';
 import auth from './middleware/auth';
 
@@ -22,6 +23,7 @@ app.use(express.json());
 
 connect(config.get('db.retries')).then(() => {
     app.post('/payment/status', asyncMiddleware(updatePaymentStatus));
+    app.post('/payment/user-info', auth, asyncMiddleware(updateUserInfoController));
     app.post('/payment', auth, asyncMiddleware(createPaymentController));
     app.get('/payments', auth, asyncMiddleware(getPaymentsController));
     app.get('/check', asyncMiddleware(ping));

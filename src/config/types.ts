@@ -19,6 +19,12 @@ export interface Config {
             options: VerifyOptions
         }
     };
+    pushNotifications: {
+        baseUrl: string;
+        key: string;
+        appId: number;
+        templateName: string;
+    },
     auth: {
         key: string;
         options: VerifyOptions;
