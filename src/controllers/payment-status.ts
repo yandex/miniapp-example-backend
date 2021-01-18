@@ -3,16 +3,16 @@ import config from 'config';
 import assert from 'http-assert';
 import { getManager } from 'typeorm';
 
-import { verify } from '../lib/jwt';
+import { verifyJwtToken } from '../lib/jwt';
 import logger from '../lib/logger';
 import Payment, { Status as PaymentStatus } from '../entities/Payment';
 import { Config } from '../config/types';
 
-export type OrderStatusNotification = {
+type OrderStatusNotification = {
     uid: number;
-    new_status: PaymentStatus;
     updated: string;
     order_id: number;
+    new_status: PaymentStatus;
 }
 
 const { key: KEY, options: OPTIONS } = config.get<Config['payment']['notification']>('payment.notification');
@@ -21,7 +21,7 @@ export async function updatePaymentStatus(req: Request, res: Response) {
     const { message: token } = req.body;
 
     try {
-        const notification = verify<OrderStatusNotification>(token, KEY, OPTIONS);
+        const notification = verifyJwtToken<OrderStatusNotification>(token, KEY, OPTIONS);
 
         await getManager().transaction(async manager => {
             let payments = await manager.find(Payment, { where: { apiPaymentId: notification.order_id } });

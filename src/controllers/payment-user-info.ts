@@ -7,7 +7,7 @@ import Payment from '../entities/Payment';
 import { sendPushNotification } from '../lib/push-notifications';
 
 export async function updateUserInfoController(req: Request, res: Response) {
-    const { userInfo: { name, email, phone }, paymentId, pushToken } = req.body;
+    const { userInfo: { name, email, phone, address }, paymentId, pushToken } = req.body;
 
     assert(paymentId, 400, 'Payment id required');
 
@@ -15,15 +15,15 @@ export async function updateUserInfoController(req: Request, res: Response) {
         let payments = await manager.find(Payment, {
             relations: ['event'],
             where: {
+                userId: req.user.id,
                 apiPaymentId: paymentId,
-                userId: req.user.psuid,
             },
         });
 
         assert(payments[0], 404, 'Payment not found');
         const payment = payments[0];
 
-        payment.userInfo = { name, email, phone };
+        payment.userInfo = { name, email, phone, address };
 
         await manager.save(payment);
 

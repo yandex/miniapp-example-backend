@@ -7,8 +7,8 @@ import {
     ManyToOne,
 } from 'typeorm';
 
-import Event from './Event';
 import { ApiResponseStatus } from '../lib/payment';
+import Event from './Event';
 
 export enum Status {
     New = 'new',
@@ -26,6 +26,7 @@ export type UserInfo = {
     name?: string;
     email?: string;
     phone?: string;
+    address?: string;
 };
 
 @Entity()
@@ -38,8 +39,10 @@ export default class Payment extends BaseEntity {
     })
     apiPaymentId?: number;
 
-    @Column()
-    userId!: string;
+    @Column({
+        nullable: true,
+    })
+    userId?: string;
 
     @Column({
         type: 'simple-json',

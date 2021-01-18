@@ -6,7 +6,7 @@ export async function getPaymentsController(req: Request, res: Response) {
     const payments = await Payment.find({
         select: ['id', 'status', 'apiResponseStatus', 'cost'],
         relations: ['event'],
-        where: { userId: req.user.psuid },
+        where: { userId: req.user.id },
     });
 
     res.json(payments);

@@ -5,17 +5,21 @@ import { getManager } from 'typeorm';
 
 import Event from '../entities/Event';
 import Payment from '../entities/Payment';
+import Delivery from '../entities/Delivery';
 import logger from '../lib/logger';
 import { createPayment, CreateOptions } from '../lib/payment';
 
 export async function createPaymentController(req: Request, res: Response, next: NextFunction) {
-    const { eventId, amount: rawAmount } = req.body;
+    const { eventId, deliveryId, amount: rawAmount } = req.body;
+    const userId = req.user.id;
     const amount = Number(rawAmount);
 
     assert(amount > 0, 400, 'Amount should be positive number');
 
     await getManager().transaction(async manager => {
-        let event = await manager.findOne(Event, eventId);
+        let event = await manager.findOne(Event, { where: { id: eventId } });
+        let delivery = await manager.findOne(Delivery, { where: { id: deliveryId } });
+        let deliveryPrice = delivery?.price ?? 0;
 
         assert(event, 404, 'Event not found');
         event = event!;
@@ -25,20 +29,33 @@ export async function createPaymentController(req: Request, res: Response, next:
             description: event.title,
             items: [
                 {
-                    name: eventId,
                     amount,
-                    currency: event.currency,
                     nds: event.nds,
+                    name: event.id,
                     price: event.price.toString(),
+                    currency: event.currency,
                 },
             ],
         };
 
+        if (delivery && deliveryPrice) {
+            options.items.push({
+                amount: 1,
+                nds: delivery.nds,
+                name: delivery.id,
+                price: delivery.price.toString(),
+                currency: delivery.currency,
+            });
+        }
+
         const payment = new Payment();
         payment.amount = amount;
         payment.event = event;
-        payment.cost = event.price * amount;
-        payment.userId = req.user.psuid;
+        payment.cost = event.price * amount + deliveryPrice;
+
+        if (userId) {
+            payment.userId = userId;
+        }
 
         await manager.save(payment);
 

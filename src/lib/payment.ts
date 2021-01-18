@@ -1,9 +1,22 @@
 import config from 'config';
 
-import { Currency, NDS } from '../entities/Event';
 import { Status } from '../entities/Payment';
 
 import { post } from './request';
+
+// Ставка НДС для платежного АПИ
+export enum NDS {
+    None = 'nds_none',
+    Nds0 = 'nds_0',
+    Nds10 = 'nds_10',
+    Nds10110 = 'nds_10_110',
+    Nds20 = 'nds_20',
+    Nds20120 = 'nds_20_120',
+}
+
+export enum Currency {
+    RUB = 'RUB'
+}
 
 export type Product = {
     product_id?: number;
