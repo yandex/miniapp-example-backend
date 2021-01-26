@@ -3,10 +3,11 @@
 Приложение умеет:
 * создавать платежи через платёжное API (создаются с параметром `mode: test`)
 * авторизовать пользователя, используя JWT, выданный Платформой
+* авторизовать пользователя, используя OAuth токен, выданный oauth.yandex.ru
 * хранить историю заказов
 
 ## API
-* `GET /payments` — получить историю платежей для пользователя. Для авторизации необходимо указать заголовок `Authorization: <JWT>`, где JWT — токен, выданный Платформой. Формат ответа: 
+* `GET /payments` — получить историю платежей для пользователя. Для авторизации необходимо указать заголовок `Authorization` в виде: `Authorization: <JWT>`, где JWT — токен, выданный Платформой или `Authorization: OAuth <OAuth>`, где OAuth — токен, выданный oauth.yandex.ru для приложения. Формат ответа: 
 ```ts
 [
    {
@@ -24,21 +25,35 @@
    },
   ...
 ]
+```
+
+* `GET /user-info` — получить информацию о пользователя. Для авторизации необходимо указать заголовок `Authorization: OAuth <OAuth>`, где OAuth — токен, выданный oauth.yandex.ru для приложения. Формат ответа: 
+```ts
+{
+    uid: string,
+    login: string,
+    name?: string,
+    email?: string,
+    psuid?: string,
+    avatar_id?: string,
+    display_name?: string
+}
 ``` 
 
-* `POST /payment` — создать платёж. Для авторизации необходимо указать заголовок `Authorization: <JWT>`, где JWT — токен, выданный Платформой. Ожидает запрос формата:
+* `POST /payment` — создать платёж. Для авторизации необходимо указать заголовок `Authorization` в виде: `Authorization: <JWT>`, где JWT — токен, выданный Платформой или `Authorization: OAuth <OAuth>`, где OAuth — токен, выданный oauth.yandex.ru для приложения. Ожидает запрос формата:
  ```ts
 {
+    amount: number,
     eventId: string,
-    amount: number
+    deliveryId?: string
 }
 ```
  Формат ответа:
 ```ts
 {
-    paymentToken: string,
     id: number,
-    cost: number
+    cost: number,
+    paymentToken: string
 }
 ```
 
