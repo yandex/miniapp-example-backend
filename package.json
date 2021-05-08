@@ -37,11 +37,11 @@
     "http-assert": "1.4.1",
     "http-errors": "1.7.3",
     "jsonwebtoken": "8.5.1",
-    "lodash": "4.17.15",
+    "lodash": "4.17.19",
     "pg": "8.0.2",
     "pino": "6.2.1",
     "pino-pretty": "4.0.0",
     "reflect-metadata": "0.1.13",
-    "typeorm": "0.2.24"
+    "typeorm": "0.2.25"
   }
 }
