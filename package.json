@@ -32,7 +32,7 @@
     "compression": "1.7.4",
     "config": "3.3.1",
     "cors": "2.8.5",
-    "express": "4.17.1",
+    "express": "4.17.3",
     "got": "11.0.2",
     "http-assert": "1.4.1",
     "http-errors": "1.7.3",
