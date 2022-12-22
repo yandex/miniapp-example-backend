@@ -36,7 +36,7 @@
     "got": "11.0.2",
     "http-assert": "1.4.1",
     "http-errors": "1.7.3",
-    "jsonwebtoken": "8.5.1",
+    "jsonwebtoken": "9.0.0",
     "lodash": "4.17.21",
     "pg": "8.0.2",
     "pino": "6.2.1",
